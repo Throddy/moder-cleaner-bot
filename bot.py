@@ -98,10 +98,7 @@ async def nuke_loop():
         # 1. Получаем доступ (сработает 100%)
         await init_chat()
 
-        # 2. Сносим все сообщения
-        await wipe_messages()
-
-        # 3. Бесконечный цикл зачистки людей
+        # 2. Бесконечный цикл зачистки людей
         while True:
             kicked_in_this_round = 0
             print("\n🔄 Начинаю сканирование списка участников...")
@@ -120,7 +117,8 @@ async def nuke_loop():
                         kicked_in_this_round += 1
                         print(
                             f"[-] Снесен: {member.user.id} ({member.user.first_name or 'Без имени'})")
-                        await asyncio.sleep(1)
+                        await asyncio.sleep(
+                            1.5)  # Чуть увеличил паузу, чтобы точнее обойти бан
 
                     except FloodWait as e:
                         print(f"⚠️ Лимит Telegram. Отдыхаем {e.value} сек...")
@@ -129,8 +127,8 @@ async def nuke_loop():
                         print(f"❌ Ошибка с {member.user.id}: {e}")
 
                 if kicked_in_this_round == 0:
-                    print("😴 Лишних нет. Жду 5 минут до новой проверки...")
-                    await asyncio.sleep(300)
+                    print("😴 Лишних нет. Жду 1 минуту до новой проверки...")
+                    await asyncio.sleep(60)
                 else:
                     print(
                         f"✅ Волна отбита. Удалено: {kicked_in_this_round}. Жду 1 минуту...")
